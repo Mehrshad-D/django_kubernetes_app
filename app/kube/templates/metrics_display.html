@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متریک‌های واقعی برنامه</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-500 to-indigo-600 min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white p-8 rounded-xl shadow-2xl max-w-2xl w-full text-center">
+        <h1 class="text-4xl font-extrabold text-gray-800 mb-6">
+            متریک‌های واقعی مصرف CPU و حافظه
+        </h1>
+        <p class="text-xl text-gray-700 mb-4">
+            اینجا می‌توانید مصرف منابع پادهای برنامه جنگو خود را مشاهده کنید. این داده‌ها مستقیماً از Metrics Server کوبرنیتس دریافت می‌شوند.
+        </p>
+
+        {% if metrics_error %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-8" role="alert">
+                <strong class="font-bold">خطا: </strong>
+                <span class="block sm:inline">{{ metrics_error }}</span>
+                <p class="text-gray-600 text-sm mt-2">اطمینان حاصل کنید که Metrics Server در حال اجراست و پاد Django-App دارای مجوزهای کافی برای خواندن متریک‌ها است.</p>
+            </div>
+        {% elif pod_cpu_metrics %}
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-6 rounded-lg relative mb-8">
+                <p class="text-2xl font-bold mb-4">مصرف منابع پادها:</p>
+                <ul class="list-disc list-inside text-left text-gray-800 space-y-2">
+                    {% for pod in pod_cpu_metrics %}
+                        <li class="mb-1">
+                            <strong>پاد:</strong> <span class="font-medium text-gray-900">{{ pod.name }}</span><br/>
+                            <span class="inline-block w-24"><strong>CPU:</strong></span> <span class="font-mono text-purple-700">{{ pod.cpu_usage }}</span><br/>
+                            <span class="inline-block w-24"><strong>حافظه:</strong></span> <span class="font-mono text-purple-700">{{ pod.memory_usage }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <p class="text-gray-600">متریک مصرف CPU و حافظه پادهای Django-App در حال حاضر در دسترس نیستند.</p>
+            <p class="text-gray-600 text-sm mt-2">اطمینان حاصل کنید که پادهای Django در حال اجرا هستند و Metrics Server کار می‌کند. پس از شروع تست بارگذاری (K6)، این بخش به‌روزرسانی می‌شود.</p>
+        {% endif %}
+
+        <div class="mt-8">
+            <a href="{% url 'index' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
+                بازگشت به صفحه اصلی
+            </a>
+            <button onclick="location.reload()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 mr-4">
+                رفرش متریک‌ها
+            </button>
+        </div>
+    </div>
+</body>
+</html>

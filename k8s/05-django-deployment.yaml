@@ -1,0 +1,65 @@
+# k8s/05-django-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app-deployment
+  namespace: hamravesh-project # Added namespace
+  labels:
+    app: django-app
+spec:
+  replicas: 1 # Start with 1 replica, HPA will scale it
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      serviceAccountName: django-app-sa
+      containers:
+        - name: django-app
+          image: mehrshad03/django-app:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_HOST
+              value: postgres-service # Refers to the Kubernetes Service name for PostgreSQL
+            - name: POSTGRES_PORT
+              value: "5432"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /healthz/
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz/
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3

@@ -1,0 +1,23 @@
+    # k8s/07-django-hpa.yaml
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    metadata:
+      name: django-app-hpa
+      namespace: hamravesh-project
+    spec:
+      scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: django-app-deployment
+      minReplicas: 1
+      maxReplicas: 5
+      metrics:
+        - type: Resource 
+          resource:
+            name: cpu 
+            target:
+              type: Utilization
+              averageUtilization: 50 
+                                     # HPA will scale up if average CPU usage (relative to requests)
+                                     # across all pods exceeds 50%.
+    

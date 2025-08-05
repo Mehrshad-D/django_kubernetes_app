@@ -1,0 +1,89 @@
+# k8s/09-rbac.yaml
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: django-app-sa # Custom ServiceAccount for your Django app
+  namespace: hamravesh-project
+  labels:
+    app: django-app
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole # Original ClusterRole for core API (pods, nodes, configmaps)
+metadata:
+  name: django-api-viewer-clusterrole
+rules:
+- apiGroups: [""] # "" indicates the core API group (pods, services, nodes)
+  resources: ["pods", "nodes"]
+  verbs: ["get", "list"] # Allow reading (get and list) of pods and nodes
+- apiGroups: [""]
+  resources: ["configmaps"] # For creating dummy configmaps
+  verbs: ["create"] # Allow creating configmaps
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding # Original binding for core API
+metadata:
+  name: django-api-viewer-clusterrolebinding
+subjects:
+- kind: ServiceAccount
+  name: django-app-sa
+  namespace: hamravesh-project
+roleRef:
+  kind: ClusterRole
+  name: django-api-viewer-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole # NEW: ClusterRole to read metrics from metrics.k8s.io
+metadata:
+  name: metrics-reader-clusterrole
+rules:
+- apiGroups: ["metrics.k8s.io"] # The API group for Kubernetes metrics
+  resources: ["pods", "nodes"]  # Specifically allow getting/listing pods and nodes metrics
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding # NEW: Binding for the metrics reader role
+metadata:
+  name: django-app-metrics-reader-binding
+subjects:
+- kind: ServiceAccount
+  name: django-app-sa
+  namespace: hamravesh-project
+roleRef:
+  kind: ClusterRole
+  name: metrics-reader-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  namespace: hamravesh-project
+  name: scale-deployment-role
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments/scale"]
+  verbs: ["get", "patch"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: scale-permission 
+subjects:
+- kind: ServiceAccount
+  name: django-app-sa
+  namespace: hamravesh-project
+roleRef:
+  kind: ClusterRole
+  name: scale-deployment-role
+  apiGroup: rbac.authorization.k8s.io
+

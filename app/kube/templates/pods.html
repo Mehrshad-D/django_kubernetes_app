@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پادهای کوبرنیتس</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #e2e8f0; 
+        }
+        th {
+            background-color: #f8fafc; 
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 0.75rem; 
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-600 to-indigo-700 min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white p-8 rounded-xl shadow-2xl max-w-5xl w-full">
+        <h1 class="text-4xl font-extrabold text-gray-800 mb-6 text-center">
+            لیست پادهای کوبرنیتس
+        </h1>
+
+        {% if pods %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-xl">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="py-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">نام پاد</th>
+                            <th class="py-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">فضای نام</th>
+                            <th class="py-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">وضعیت</th>
+                            <th class="py-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">نام نود</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for pod in pods %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ pod.name }}</td>
+                                <td class="py-4 px-6 text-sm text-gray-700">{{ pod.namespace }}</td>
+                                <td class="py-4 px-6 text-sm {% if pod.status == 'Running' %}text-green-600{% elif pod.status == 'Pending' %}text-yellow-600{% else %}text-red-600{% endif %} font-semibold">
+                                    {{ pod.status }}
+                                </td>
+                                <td class="py-4 px-6 text-sm text-gray-700">{{ pod.node_name|default:"N/A" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center text-lg text-gray-700">هیچ پادی پیدا نشد یا خطایی رخ داده است.</p>
+        {% endif %}
+
+        <div class="mt-8 text-center">
+            <a href="{% url 'index' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+    </div>
+</body>
+</html>

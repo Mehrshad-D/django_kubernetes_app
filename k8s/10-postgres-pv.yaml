@@ -1,0 +1,14 @@
+# 10-postgres-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv
+  namespace: hamravesh-project
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/postgres"  # Ensure this directory exists on the worker node

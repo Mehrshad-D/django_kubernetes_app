@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نودهای کوبرنیتس</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #e2e8f0; 
+        }
+        th {
+            background-color: #f8fafc; 
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 0.75rem; 
+            overflow: hidden;
+        }
+        .capacity-cell div {
+            font-size: 0.875rem; 
+            color: #4a5568; 
+        }
+        .capacity-cell strong {
+            color: #2d3748; 
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-600 to-cyan-700 min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white p-8 rounded-xl shadow-2xl max-w-6xl w-full">
+        <h1 class="text-4xl font-extrabold text-gray-800 mb-6 text-center">
+            لیست نودهای کوبرنیتس
+        </h1>
+
+        {% if nodes %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-xl">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="py-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">نام نود</th>
+                            <th class="py-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">وضعیت</th>
+                            <th class="py-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">آدرس‌ها</th>
+                            <th class="py-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">ظرفیت</th>
+                            <th class="py-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">قابل تخصیص</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for node in nodes %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ node.name }}</td>
+                                <td class="py-4 px-6 text-sm {% if node.status == 'Ready' %}text-green-600{% else %}text-red-600{% endif %} font-semibold">
+                                    {{ node.status }}
+                                </td>
+                                <td class="py-4 px-6 text-sm text-gray-700">
+                                    {% for addr in node.addresses %}
+                                        <div><strong>{{ addr.type }}:</strong> {{ addr.address }}</div>
+                                    {% endfor %}
+                                </td>
+                                <td class="py-4 px-6 text-sm text-gray-700 capacity-cell">
+                                    <div><strong>CPU:</strong> {{ node.capacity.cpu }}</div>
+                                    <div><strong>حافظه:</strong> {{ node.capacity.memory }}</div>
+                                    <div><strong>پادها:</strong> {{ node.capacity.pods }}</div>
+                                </td>
+                                <td class="py-4 px-6 text-sm text-gray-700 capacity-cell">
+                                    <div><strong>CPU:</strong> {{ node.allocatable.cpu }}</div>
+                                    <div><strong>حافظه:</strong> {{ node.allocatable.memory }}</div>
+                                    <div><strong>پادها:</strong> {{ node.allocatable.pods }}</div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center text-lg text-gray-700">هیچ نودی پیدا نشد یا خطایی رخ داده است.</p>
+        {% endif %}
+
+        <div class="mt-8 text-center">
+            <a href="{% url 'index' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+    </div>
+</body>
+</html>
