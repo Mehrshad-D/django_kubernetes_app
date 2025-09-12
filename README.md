@@ -36,18 +36,18 @@ This project showcases both **DevOps skills** (cluster setup, networking, scalin
 
    
 ## Application Deployment
-   - **The Django application was containerized and deployed using a Deployment.
+   - The Django application was containerized and deployed using a Deployment.
      
-   - **A PostgreSQL database was deployed inside the cluster for persistent data storage.
+   - A PostgreSQL database was deployed inside the cluster for persistent data storage.
 
-   - **Kubernetes Services (ClusterIP and NodePort) were used for internal and external access.
+   - Kubernetes Services (ClusterIP and NodePort) were used for internal and external access.
 
 ## Custom Dashboard
 
 I developed a custom web-based dashboard that integrates with the Kubernetes API and PostgreSQL database:
 
-   - **Pod and Node Management: List all pods and nodes, with their status and metadata.
+   - Pod and Node Management: List all pods and nodes, with their status and metadata.
 
-   - **Metrics Visualization: Display CPU and memory usage for workloads.
+   - Metrics Visualization: Display CPU and memory usage for workloads.
 
-   - **Database Interaction: Connect to PostgreSQL, run queries, and visualize results.
+   - Database Interaction: Connect to PostgreSQL, run queries, and visualize results.
