@@ -1,28 +1,26 @@
-my-django-kube-app
-Getting Started
-To get your Django dashboard and PostgreSQL database running on a Kubernetes cluster, follow these steps. This guide assumes you have a working Kubernetes cluster and the kubectl command-line tool configured.
+# Kubernetes Django Project with Custom Dashboard
 
-Features
-Kubernetes Cluster
-Fully Containerized Stack: The entire application, including both the Django dashboard and the PostgreSQL database, runs as pods within the Kubernetes cluster.
+## 📌 Overview
+This project demonstrates a **Kubernetes cluster** setup with one master node and two worker nodes, running a **Django-based web application** backed by a **PostgreSQL database**.  
 
-Kubernetes Service Integration: The Django application connects to the PostgreSQL database using its internal Kubernetes service name, ensuring reliable and stable communication.
+In addition to deploying the application, I developed a **custom Kubernetes dashboard** that allows:
+- Listing pods and nodes in the cluster
+- Viewing CPU and memory metrics
+- Interacting with a PostgreSQL database
 
-Django Dashboard
-Cluster Visualization: View a live list of all nodes and pods in your cluster.
+This project showcases both **DevOps skills** (cluster setup, networking, scaling, RBAC, monitoring) and **application development** (Django, database integration, dashboard).
 
-Real-Time Metrics: Monitor key metrics like CPU and memory usage of your pods and nodes.
+---
 
-Database Integration: The dashboard uses a PostgreSQL database to store and manage operational data.
+## ⚙️ Cluster Setup
 
-Architecture
-The application is built on a simple, robust architecture where the Django web application and its PostgreSQL database are both deployed as self-contained pods within the Kubernetes cluster. This design leverages the cluster's internal DNS to facilitate secure communication between the two components.
+- **Master node:** 1  
+- **Worker nodes:** 2  
+- **Container runtime:** containerd  
+- **CNI plugin:** Calico (for pod networking)  
+- **Pod CIDR:** `192.168.0.0/16`  
 
-Installation and Deployment
-Step 1: Deploy to Kubernetes
-First, apply the provided Kubernetes manifest files to deploy the PostgreSQL database, the Django application, and their corresponding services.
-
-kubectl apply -f k8s/
-
-Step 2: Access the Dashboard
-Once the pods are in a Running state, you can access the dashboard through the Kubernetes Ingress. Depending on your Ingress controller setup, you will need to find the external IP address or DNS name of the Ingress to navigate to the dashboard in your web browser.
+### Steps:
+1. Initialize the cluster on the master:
+   ```bash
+   kubeadm init --pod-network-cidr=192.168.0.0/16
