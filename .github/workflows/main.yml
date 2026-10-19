@@ -11,8 +11,8 @@ jobs:
         run: |
           curl -v -IL --connect-timeout 15 https://hub.hamdocker.ir/ || true
           curl -v -IL --connect-timeout 15 https://registry.hamdocker.ir/ || true
-          mtr -nT -r -c 7 hub.hamdocker.ir || true
-          mtr -r -c 7 registry.hamdocker.ir || true
+          mtr -nT -r -c 7 hub.hamdocker.ir
+          mtr -r -c 7 registry.hamdocker.ir
           
   darkube_build_django-github_dehghanimehrshad82-repo-test_hamravesh-c13:
     needs: network_diagnostics
