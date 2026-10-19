@@ -1,5 +1,21 @@
 jobs:
+  network_diagnostics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install diagnostic tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl mtr-tiny
+
+      - name: Test registry connectivity
+        run: |
+          curl -v -L --connect-timeout 15 https://hub.hamdocker.ir/ || true
+          curl -v -L --connect-timeout 15 https://registry.hamdocker.ir/ || true
+          mtr -nT -r -c 20 hub.hamdocker.ir || true
+          mtr -nT -r -c 20 registry.hamdocker.ir || true
+          
   darkube_build_django-github_dehghanimehrshad82-repo-test_hamravesh-c13:
+    needs: network_diagnostics
     container:
       image: hamravesh/darkube-cli:v1.1
       options: --user root
