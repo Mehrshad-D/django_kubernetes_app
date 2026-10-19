@@ -2,7 +2,7 @@
 
 # Stage 1: Build stage
 # Use a Python base image for building the application
-FROM --platform=linux/amd64 python:3.9-slim-bookworm AS builder
+FROM --platform=linux/amd64 hub.hamdocker.ir/python:3.9-bookworm AS builder
 
 # Set working directory in the container
 WORKDIR /app
