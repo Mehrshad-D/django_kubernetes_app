@@ -8,7 +8,7 @@ In addition to deploying the application, I developed a **custom Kubernetes dash
 - Viewing CPU and memory metrics
 - Interacting with a PostgreSQL database
 
-This project showcases both **DevOps skills** (cluster setup, networking, scaling, RBAC, monitoring) and **application development** (Django, database integration, dashboard).
+This project showcases both **DevOps skills** (cluster setup, networking, scaling, RBAC, monitoring) and **application development** (Django, database integration, dashboard). 
 
 ---
 
