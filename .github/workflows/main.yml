@@ -9,10 +9,10 @@ jobs:
 
       - name: Test registry connectivity
         run: |
-          curl -v -L --connect-timeout 15 https://hub.hamdocker.ir/ || true
-          curl -v -L --connect-timeout 15 https://registry.hamdocker.ir/ || true
-          mtr -nT -r -c 20 hub.hamdocker.ir || true
-          mtr -nT -r -c 20 registry.hamdocker.ir || true
+          curl -v -IL --connect-timeout 15 https://hub.hamdocker.ir/ || true
+          curl -v -IL --connect-timeout 15 https://registry.hamdocker.ir/ || true
+          mtr -nT -r -c 7 hub.hamdocker.ir || true
+          mtr -r -c 7 registry.hamdocker.ir || true
           
   darkube_build_django-github_dehghanimehrshad82-repo-test_hamravesh-c13:
     needs: network_diagnostics
