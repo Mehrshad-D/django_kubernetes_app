@@ -12,7 +12,7 @@ This project showcases both **DevOps skills** (cluster setup, networking, scalin
 
 ---
 
-## Cluster Setup
+## Cluster Setup  
 
 - **Master node:** 1  
 - **Worker nodes:** 2  
